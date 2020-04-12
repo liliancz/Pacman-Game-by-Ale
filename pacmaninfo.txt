@@ -1,0 +1,14 @@
+240 regular “food” dots and 4 energizers.
+
+ Maze Tiles / Sprites!
+Much of Pac-Man’s design and mechanics revolve around the idea of the board being split into sections or tiles.
+ A “Tile” refers to an 8 x 8 pixel square on the screen.
+
+Because Pac-Man's original arcade resolution is 224 x 288 (3:4), the game uses a total board size of 28 x 36 tiles. 
+
+The ghosts are always in one of three AI modes: Chase, Scatter, or Frightened.
+
+
+
+224 x 288
+

@@ -1,6 +1,4 @@
-import pygame, sys, time
-from pygame.locals import *
-import random
+import pygame, sys, time from pygame.locals import * import random
 
 pygame.init()
 screen_width = 626
@@ -12,7 +10,7 @@ p_nI = 3
 p_x = 0
 p_y = 0
 cfv= 0
-pacman = pygame.image.load("pacman2.png")
+pacman = pygame.image.load("pacman32x32.png")
 black = 0,0,0
 direction = 0
 keypressed = False
@@ -38,27 +36,23 @@ while True:
 				direction = direction
 
 	if direction  == 'up':
-		print ('up')
-		p_y += 1
-	if direction == 'down':
 		p_y -= 1
+	if direction == 'down':
+		p_y += 1
 	if direction == 'right':
-		p_x += 1
-		angle = -90
-		pacman = pygame.transform.rotate(pacman, angle)
-		DISPLAYSURF.blit(pacman, (p_x, p_y))
+		p_x += 1	
 	if direction == 'left':
 		p_x -= 1
+		
 	window.fill(black)
-	window.blit(pacman, (p_x,p_y), (p_cI*128, 0, 128, 128))
+	window.blit(pacman, (p_x,p_y), (p_cI*32, 0, 32, 32))
 
 	pygame.display.update()
-	if cfv > 60:
+	if cfv > 500:
 		cfv = 0
 		if p_cI > p_nI-1 :
 			p_cI = 0
-		else:
-			p_cI += 1
+		p_cI += 1
 	cfv += 1
 	
 
