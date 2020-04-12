@@ -1,3 +1,5 @@
+from pygame.math import Vector2 as vec
+
 # screen settings
 
 TOP_BOTTOM_BUFFER = 50
@@ -12,8 +14,10 @@ BLACK = (0,0,0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREY = (107, 107, 107)
+PLAYER_COLOUR = (150, 150, 0) 
 
 # font settings
 START_TEXT_SIZE = 16
 START_FONT = 'arial black'
 # player settings
+PLAYER_START_POS = vec(1,10)

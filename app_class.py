@@ -1,5 +1,6 @@
 import pygame, sys
 from settings import *
+from player_class import *
 
 pygame.init()   
 vec = pygame.math.Vector2
@@ -12,7 +13,7 @@ class App:
         self.state = 'start'
         self.cell_width = MAZE_WIDTH // 28
         self.cell_height = MAZE_HEIGHT // 30
-
+        self.player = Player(self, PLAYER_START_POS)
         self.load()
     def run(self):
         while self.running:
@@ -50,7 +51,7 @@ class App:
             pygame.draw.line(self.background, GREY, (x*self.cell_width, 0),
                              (x*self.cell_width, HEIGHT))
         for x in range(HEIGHT//self.cell_height):
-            pygame.draw.line(self.screen, GREY, (0, x*self.cell_height),
+            pygame.draw.line(self.background, GREY, (0, x*self.cell_height),
                              (WIDTH, x*self.cell_height))        
 ################### START FUNCTIONS #################
     def start_events(self):
@@ -79,11 +80,20 @@ class App:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.player.move(vec(-1,0))
+                if event.key == pygame.K_RIGHT:
+                    self.player.move(vec(1,0))
+                if event.key == pygame.K_DOWN:
+                    self.player.move(vec(0,1))
+                if event.key == pygame.K_UP:
+                    self.player.move(vec(0,-1))
            
                 
 
     def play_update(self):
-        pass
+        self.player.update()
     
     def play_draw(self):
         self.screen.fill(BLACK)
@@ -94,6 +104,7 @@ class App:
                        START_FONT)
         self.draw_text('HIGH SCORE : 0', self.screen, [WIDTH//2+60,0], 16, WHITE,
                        START_FONT)
+        self.player.draw()
         pygame.display.update()
         
     
