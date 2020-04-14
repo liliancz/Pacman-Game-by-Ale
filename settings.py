@@ -20,4 +20,4 @@ PLAYER_COLOUR = (150, 150, 0)
 START_TEXT_SIZE = 16
 START_FONT = 'arial black'
 # player settings
-PLAYER_START_POS = vec(13,17)
+#PLAYER_START_POS = vec(13,17)
