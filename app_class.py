@@ -48,13 +48,14 @@ class App:
                                                  (MAZE_WIDTH, MAZE_HEIGHT))
 
         #Opening walls file
-        #Creating walls list with coords of walls
+        #Creating walls list with co-ords of walls
+        #stored as a vector
         with open("walls.txt", 'r') as file:
             for yindex, line in enumerate(file):
                 for xindex, char in enumerate(line):
                     if char == "1":
                         self.walls.append(vec(xindex, yindex))
-        print(len(self.walls))
+        #print(len(self.walls))
                         
                          
     def draw_grid(self):
@@ -63,7 +64,10 @@ class App:
                              (x*self.cell_width, HEIGHT))
         for x in range(HEIGHT//self.cell_height):
             pygame.draw.line(self.background, GREY, (0, x*self.cell_height),
-                             (WIDTH, x*self.cell_height))        
+                             (WIDTH, x*self.cell_height))
+        for wall in self.walls:
+            pygame.draw.rect(self.background, (112, 55, 169),(wall.x*self.cell_width,
+                            wall.y*self.cell_height, self.cell_width, self.cell_height))
 ################### START FUNCTIONS #################
     def start_events(self):
         for event in pygame.event.get():
@@ -110,7 +114,7 @@ class App:
         self.screen.fill(BLACK)
         self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2,
                                            TOP_BOTTOM_BUFFER//2))
-        self.draw_grid()
+        #self.draw_grid()
         self.draw_text('SCORE : 0', self.screen, [60,0], 16, WHITE,
                        START_FONT)
         self.draw_text('HIGH SCORE : 0', self.screen, [WIDTH//2+60,0], 16, WHITE,
