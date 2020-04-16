@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, copy
 from settings import *
 from player_class import *
 from enemy_class import *
@@ -12,8 +12,8 @@ class App:
         self.clock = pygame.time.Clock()
         self.running = True
         self.state = 'start'
-        self.cell_width = MAZE_WIDTH // 28
-        self.cell_height = MAZE_HEIGHT // 30
+        self.cell_width = MAZE_WIDTH // COLS
+        self.cell_height = MAZE_HEIGHT // ROWS
         self.enemies = []
         self.walls =[]
         self.coins =[]
@@ -21,8 +21,9 @@ class App:
         self.e_pos = []
         self.p_pos = None
         self.load()
-        self.player = Player(self, self.p_pos)
+        self.player = Player(self, vec(self.p_pos))
         self.make_enemies()
+        
         
     def run(self):
         while self.running:
@@ -34,6 +35,10 @@ class App:
                 self.play_events()
                 self.play_update()
                 self.play_draw()
+            elif self.state =='game over':
+                self.game_over_events()
+                self.game_over_update()
+                self.game_over_draw()
             else:
                 self.running = False
             self.clock.tick(FPS)            
@@ -59,8 +64,7 @@ class App:
                                                  (MAZE_WIDTH, MAZE_HEIGHT))
 
         #Opening walls file
-        #Creating walls list with co-ords of walls
-        #stored as a vector
+        #Creating walls list with co-ords of walls // stored as a vector
         with open("walls.txt", 'r') as file:
             for yindex, line in enumerate(file):
                 for xindex, char in enumerate(line):
@@ -69,9 +73,9 @@ class App:
                     elif char == "C":
                         self.coins.append(vec(xindex, yindex))
                     elif char == "P":
-                        self.p_pos = vec(xindex, yindex)
+                        self.p_pos = [xindex, yindex]
                     elif char in ["2","3","4","5"]:
-                        self.e_pos.append(vec(xindex, yindex))
+                        self.e_pos.append([xindex, yindex])
                     elif char == "B":
                         pygame.draw.rect(self.background, BLACK, (xindex*self.cell_width, yindex*self.cell_height, self.cell_width, self.cell_height))
                     
@@ -79,7 +83,7 @@ class App:
                         
     def make_enemies(self):
         for index, pos in enumerate(self.e_pos):
-            self.enemies.append(Enemy(self, pos, index))
+            self.enemies.append(Enemy(self, vec(pos), index))
 
         
     def draw_grid(self):
@@ -96,7 +100,30 @@ class App:
         #    pygame.draw.rect(self.background, (10,150,20), (coin.x*self.cell_width,
          #                   coin.y*self.cell_height, self.cell_width, self.cell_height))
 
-################### START FUNCTIONS #################
+    def reset(self):
+        self.player.lives = 3
+        self.player.current_score = 0
+        self.player.grid_pos = vec(self.player.starting_pos)
+        self.player.pix_pos = self.player.get_pix_pos()
+        self.player.direction *= 0
+        for enemy in self.enemies:
+            enemy.grid_pos = vec(enemy.starting_pos)
+            enemy.pix_pos = enemy.get_pix_pos()
+            enemy.direction *= 0
+            
+        self.coins = []
+        with open("walls.txt", 'r') as file:
+            for yindex, line in enumerate(file):
+                for xindex, char in enumerate(line):
+                    if char == 'C':
+                        self.coins.append(vec(xindex, yindex))
+        self.state = "play"
+
+
+
+                    
+################### START FUNCTIONS ######################################################
+                    
     def start_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,7 +145,9 @@ class App:
                        START_TEXT_SIZE, WHITE, START_FONT, centered=True)
         pygame.display.update()
 
+
 ################### PLAY FUNCTIONS #################
+
     def play_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -139,6 +168,9 @@ class App:
         self.player.update()
         for enemy in self.enemies:
             enemy.update()
+        for enemy in self.enemies:
+            if enemy.grid_pos == self.player.grid_pos:
+                self.remove_life()
     
     def play_draw(self):
         self.screen.fill(BLACK)
@@ -157,6 +189,21 @@ class App:
         pygame.display.update()
         #self.coins.pop()
 
+    def remove_life(self):
+        self.player.lives -= 1
+        if self.player.lives == 0:
+            self.state = "game over"
+        else:
+            self.player.grid_pos = vec(self.player.starting_pos)
+            self.player.pix_pos = self.player.get_pix_pos()
+            self.player.direction *= 0
+            for enemy in self.enemies:
+                enemy.grid_pos = vec(enemy.starting_pos)
+                enemy.pix_pos = enemy.get_pix_pos()
+                enemy.direction *= 0
+            
+            
+        
     def draw_coins(self):
         for coin in self.coins:
             pygame.draw.circle(self.screen, (82,120,25),
@@ -166,3 +213,26 @@ class App:
     
 
     
+################### GAME OVER FUNCTIONS #################
+
+    def game_over_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.reset()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                 self.running = False
+    
+    def game_over_update(self):
+        pass
+    def game_over_draw(self):
+        self.screen.fill(BLACK)
+        quit_text = "PRESS ESCAPE BUTTON TO QUIT"
+        again_text = "PRESS SPACEBAR TO PLAY AGAIN"
+        self.draw_text("GAME OVER", self.screen, [WIDTH//2, 100], 36, RED, "arial black", centered= True)
+        self.draw_text(again_text, self.screen, [WIDTH//2, HEIGHT//2], OVER_TEXT_SIZE, (190, 190,190), "arial black", centered= True)
+        self.draw_text(quit_text, self.screen, [WIDTH//2, 400], OVER_TEXT_SIZE, (190, 190,190), "arial black", centered= True)
+        
+        pygame.display.update()
+        
