@@ -11,6 +11,7 @@ p_cI = 1
 p_nI = 3
 p_x = 0
 p_y = 0
+p_y1 = 1
 cfv= 0
 pacman = pygame.image.load("pacman32x32.png")
 black = 0,0,0
@@ -38,16 +39,20 @@ while True:
 				direction = direction
 
 	if direction  == 'up':
-		p_y -= 1
+		p_y -= 0.1
+		p_y1 = 0
 	if direction == 'down':
-		p_y += 1
+		p_y += 0.1
+		p_y1= 2
 	if direction == 'right':
-		p_x += 1	
+		p_x += 0.1
+		p_y1 = 1
 	if direction == 'left':
-		p_x -= 1
+		p_x -= 0.1
+		p_y1 = 3
 		
 	window.fill(black)
-	window.blit(pacman, (p_x,p_y), (p_cI*32, 0, 32, 32))
+	window.blit(pacman, (p_x,p_y), (p_cI*32, p_y1*32, 32, 32))
 
 	pygame.display.update()
 	if cfv > 500:

@@ -60,9 +60,9 @@ class App:
 
     def load(self):
         self.background = pygame.image.load('background.png')
-        self.background = pygame.transform.scale(self.background,
-                                                 (MAZE_WIDTH, MAZE_HEIGHT))
+        self.background = pygame.transform.scale(self.background,(MAZE_WIDTH, MAZE_HEIGHT)) 
 
+        
         #Opening walls file
         #Creating walls list with co-ords of walls // stored as a vector
         with open("walls.txt", 'r') as file:
@@ -138,12 +138,9 @@ class App:
     
     def start_draw(self):
         self.screen.fill(BLACK)
-        self.draw_text('PRESS SPACE BAR TO PLAY', self.screen, [WIDTH//2, HEIGHT//2],
-                       START_TEXT_SIZE, (170,132,58), START_FONT, centered=True)
-        self.draw_text('1 PLAYER ONLY', self.screen, [WIDTH//2, HEIGHT//2+50],
-                       START_TEXT_SIZE, (44,167,198), START_FONT, centered=True)
-        self.draw_text('HIGH SCORE', self.screen, [WIDTH//2, 5],
-                       START_TEXT_SIZE, WHITE, START_FONT, centered=True)
+        self.draw_text('PRESS SPACE BAR TO PLAY', self.screen, [WIDTH//2, HEIGHT//2],START_TEXT_SIZE, (170,132,58), START_FONT, centered=True)
+        self.draw_text('1 PLAYER ONLY', self.screen, [WIDTH//2, HEIGHT//2+50], START_TEXT_SIZE, (44,167,198), START_FONT, centered=True)
+        self.draw_text('HIGH SCORE', self.screen, [WIDTH//2, 10], START_TEXT_SIZE, WHITE, START_FONT, centered=True)
         pygame.display.update()
 
 
@@ -156,14 +153,16 @@ class App:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     self.player.move(vec(-1,0))
+                    self.player.p_Iy = 3
                 if event.key == pygame.K_RIGHT:
                     self.player.move(vec(1,0))
+                    self.player.p_Iy = 1
                 if event.key == pygame.K_DOWN:
                     self.player.move(vec(0,1))
+                    self.player.p_Iy = 2
                 if event.key == pygame.K_UP:
                     self.player.move(vec(0,-1))
-           
-                
+                    self.player.p_Iy = 0
 
     def play_update(self):
         self.player.update()
@@ -175,20 +174,15 @@ class App:
     
     def play_draw(self):
         self.screen.fill(BLACK)
-
-        self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2,
-                                           TOP_BOTTOM_BUFFER//2))
+        self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2,TOP_BOTTOM_BUFFER//2))
         self.draw_coins()
         #self.draw_grid()
-        self.draw_text('SCORE : {}'.format(self.player.current_score), self.screen, [60,0], 16, WHITE,
-                       START_FONT)
-        self.draw_text('HIGH SCORE : 0', self.screen, [WIDTH//2+60,0], 16, WHITE,
-                       START_FONT)
+        self.draw_text('SCORE : {}'.format(self.player.current_score), self.screen, [60,0], 16, WHITE, START_FONT)
+        self.draw_text('HIGH SCORE : 0', self.screen, [WIDTH//2+60,0], 16, WHITE,START_FONT)
         self.player.draw()
         for enemy in self.enemies:
             enemy.draw()
         pygame.display.update()
-        #self.coins.pop()
 
     def remove_life(self):
         self.player.lives -= 1
@@ -207,11 +201,7 @@ class App:
         
     def draw_coins(self):
         for coin in self.coins:
-            pygame.draw.circle(self.screen, (82,120,25),
-                               (int(coin.x*self.cell_width)+self.cell_width//2+TOP_BOTTOM_BUFFER//2,
-                                int(coin.y*self.cell_height)+self.cell_height//2+TOP_BOTTOM_BUFFER//2),4)
-        
-    
+            pygame.draw.circle(self.screen, COIN_COLOUR,(int(coin.x*self.cell_width)+self.cell_width//2+TOP_BOTTOM_BUFFER//2,int(coin.y*self.cell_height)+self.cell_height//2+TOP_BOTTOM_BUFFER//2),COIN_RADIUS)
 
     
 ################### GAME OVER FUNCTIONS #################
@@ -230,10 +220,11 @@ class App:
     def game_over_draw(self):
         self.screen.fill(BLACK)
         quit_text = "PRESS ESCAPE BUTTON TO QUIT"
-        again_text = "PRESS SPACEBAR TO PLAY AGAIN"
-        self.draw_text("GAME OVER", self.screen, [WIDTH//2, 100], 36, RED, "arial black", centered= True)
-        self.draw_text(again_text, self.screen, [WIDTH//2, HEIGHT//2], OVER_TEXT_SIZE, (190, 190,190), "arial black", centered= True)
-        self.draw_text(quit_text, self.screen, [WIDTH//2, 400], OVER_TEXT_SIZE, (190, 190,190), "arial black", centered= True)
-        
+        self.draw_text("GAME OVER", self.screen, [WIDTH//2, 100], 36, RED, OVER_FONT, centered= True)
+        self.draw_text(quit_text, self.screen, [WIDTH//2, 600], OVER_TEXT_SIZE, (190, 190,190), OVER_FONT, centered= True)
+        self.draw_text('PRESS SPACE BAR TO PLAY', self.screen, [WIDTH//2, HEIGHT//2],START_TEXT_SIZE, (170,132,58), START_FONT, centered=True)
+        self.draw_text('1 PLAYER ONLY', self.screen, [WIDTH//2, HEIGHT//2+50],START_TEXT_SIZE, (44,167,198), START_FONT, centered=True)
+        self.draw_text('HIGH SCORE', self.screen, [WIDTH//2, 10],START_TEXT_SIZE, WHITE, START_FONT, centered=True)
         pygame.display.update()
+       
         

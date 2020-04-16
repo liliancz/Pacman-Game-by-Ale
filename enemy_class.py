@@ -17,6 +17,14 @@ class Enemy:
         self.personality = self.set_personality()
         self.target = None
         self.speed = self.set_speed()
+        self.ghost = pygame.image.load("pacman32x32.png")
+        self.ghost = pygame.transform.scale(self.ghost, (160,160))
+        self.g_cImagex = 0
+        self.g_nImagex = 2
+        #self.g_Imagey = 4
+        self.fps = 5
+        self.cfps = 0
+        self.g_Imagey = self.set_ghost_colour()
 
     def update(self):
         self.target = self.set_target()
@@ -30,10 +38,9 @@ class Enemy:
 
 
     def draw(self):
-        pygame.draw.circle(self.app.screen, self.colour,
-                               (int(self.pix_pos.x), int(self.pix_pos.y)),
-                               self.radius)
-
+        #pygame.draw.circle(self.app.screen, self.colour,(int(self.pix_pos.x), int(self.pix_pos.y)),self.radius)
+        self.app.screen.blit(self.ghost, (int(self.pix_pos.x)-self.app.cell_width//2,int(self.pix_pos.y)-self.app.cell_width//2), (self.g_cImagex*20,self.g_Imagey*20, 20,20))
+        
     def set_speed(self):
         if self.personality in ["speedy","scared"]:
             speed = 2
@@ -150,6 +157,19 @@ class Enemy:
             
         if self.number == 3:
             return  (215,178,33)
+
+    def set_ghost_colour(self):
+        if self.number == 0:
+            return  4
+            
+        if self.number == 1:
+            return  5
+            
+        if self.number == 2:
+            return  6
+            
+        if self.number == 3:
+            return  7
 
     def set_personality(self):
         if self.number == 0:
