@@ -125,6 +125,7 @@ class App:
 ################### START FUNCTIONS ######################################################
                     
     def start_events(self):
+        pygame.display.set_caption('PAC-MAN by ALEJANDRA CRUZ')
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -137,7 +138,7 @@ class App:
     
     def start_draw(self):
         self.screen.fill(BLACK)
-        self.draw_text('PUSH SPACE BAR', self.screen, [WIDTH//2, HEIGHT//2],
+        self.draw_text('PRESS SPACE BAR TO PLAY', self.screen, [WIDTH//2, HEIGHT//2],
                        START_TEXT_SIZE, (170,132,58), START_FONT, centered=True)
         self.draw_text('1 PLAYER ONLY', self.screen, [WIDTH//2, HEIGHT//2+50],
                        START_TEXT_SIZE, (44,167,198), START_FONT, centered=True)
@@ -178,7 +179,7 @@ class App:
         self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2,
                                            TOP_BOTTOM_BUFFER//2))
         self.draw_coins()
-        self.draw_grid()
+        #self.draw_grid()
         self.draw_text('SCORE : {}'.format(self.player.current_score), self.screen, [60,0], 16, WHITE,
                        START_FONT)
         self.draw_text('HIGH SCORE : 0', self.screen, [WIDTH//2+60,0], 16, WHITE,

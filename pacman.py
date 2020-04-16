@@ -1,4 +1,6 @@
-import pygame, sys, time from pygame.locals import * import random
+import pygame, sys, time
+from pygame.locals import *
+import random
 
 pygame.init()
 screen_width = 626
