@@ -39,6 +39,10 @@ class App:
                 self.game_over_events()
                 self.game_over_update()
                 self.game_over_draw()
+            elif self.state =='won':
+                self.won_events()
+                self.won_update()
+                self.won_draw()
             else:
                 self.running = False
             self.clock.tick(FPS)            
@@ -171,7 +175,9 @@ class App:
         for enemy in self.enemies:
             if enemy.grid_pos == self.player.grid_pos:
                 self.remove_life()
-    
+        if self.player.current_score > 2000:
+            self.state = 'won'
+                
     def play_draw(self):
         self.screen.fill(BLACK)
         self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2,TOP_BOTTOM_BUFFER//2))
@@ -221,6 +227,30 @@ class App:
         self.screen.fill(BLACK)
         quit_text = "PRESS ESCAPE BUTTON TO QUIT"
         self.draw_text("GAME OVER", self.screen, [WIDTH//2, 100], 36, RED, OVER_FONT, centered= True)
+        self.draw_text(quit_text, self.screen, [WIDTH//2, 600], OVER_TEXT_SIZE, (190, 190,190), OVER_FONT, centered= True)
+        self.draw_text('PRESS SPACE BAR TO PLAY', self.screen, [WIDTH//2, HEIGHT//2],START_TEXT_SIZE, (170,132,58), START_FONT, centered=True)
+        self.draw_text('1 PLAYER ONLY', self.screen, [WIDTH//2, HEIGHT//2+50],START_TEXT_SIZE, (44,167,198), START_FONT, centered=True)
+        self.draw_text('HIGH SCORE', self.screen, [WIDTH//2, 10],START_TEXT_SIZE, WHITE, START_FONT, centered=True)
+        pygame.display.update()
+
+
+################### WON OVER FUNCTIONS #################
+
+    def won_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.reset()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                 self.running = False
+    
+    def won_update(self):
+        pass
+    def won_draw(self):
+        self.screen.fill(BLACK)
+        quit_text = "PRESS ESCAPE BUTTON TO QUIT"
+        self.draw_text("WON", self.screen, [WIDTH//2, 100], 36, RED, OVER_FONT, centered= True)
         self.draw_text(quit_text, self.screen, [WIDTH//2, 600], OVER_TEXT_SIZE, (190, 190,190), OVER_FONT, centered= True)
         self.draw_text('PRESS SPACE BAR TO PLAY', self.screen, [WIDTH//2, HEIGHT//2],START_TEXT_SIZE, (170,132,58), START_FONT, centered=True)
         self.draw_text('1 PLAYER ONLY', self.screen, [WIDTH//2, HEIGHT//2+50],START_TEXT_SIZE, (44,167,198), START_FONT, centered=True)

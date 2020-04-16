@@ -166,10 +166,10 @@ class Enemy:
             return  5
             
         if self.number == 2:
-            return  6
+            return  7
             
         if self.number == 3:
-            return  7
+            return  6
 
     def set_personality(self):
         if self.number == 0:

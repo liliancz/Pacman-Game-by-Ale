@@ -13,7 +13,7 @@ BLACK = (0,0,0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREY = (107, 107, 107)
-PLAYER_COLOUR = (150, 150, 0) 
+PLAYER_COLOUR = (255, 255, 0) 
 COIN_COLOUR = (254,184,198)
 
 # font settings

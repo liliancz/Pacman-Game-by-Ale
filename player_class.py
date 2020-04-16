@@ -13,13 +13,13 @@ class Player:
         self.able_to_move = True
         self.current_score = 0
         self.speed = 2
-        self.lives = 1
+        self.lives = 3
         self.pacman = pygame.image.load("pacman32x32.png")
         self.pacman = pygame.transform.scale(self.pacman, (160,160))
         self.p_cIx = 1
         self.p_nIx = 3
         self.p_Iy = 1
-        self.fps = 5
+        self.fps = 10
         self.cfps = 0
         
     def update(self):
@@ -35,6 +35,7 @@ class Player:
 
         if self.on_coin():
             self.eat_coin()
+        
             
         if self.cfps > self.fps:
             self.cfps = 0
@@ -48,10 +49,10 @@ class Player:
         self.app.screen.blit(self.pacman, (int(self.pix_pos.x)-self.app.cell_width//2,int(self.pix_pos.y)-self.app.cell_width//2), (self.p_cIx*20,self.p_Iy*20, 20,20))
         #draw player lives
         for x in range(self.lives):
-            pygame.draw.circle(self.app.screen, PLAYER_COLOUR, (30 + 20*x, HEIGHT -15), 7)  
+            self.app.screen.blit(self.pacman, (30 + 30*x -self.app.cell_width//2, HEIGHT - 15-self.app.cell_width//2), (2*20,3*20, 20,20))
+            #pygame.draw.circle(self.app.screen, PLAYER_COLOUR, (30 + 20*x, HEIGHT -15), 7)  
         #drawing the grid pos rect
-        pygame.draw.rect(self.app.screen, RED,(self.grid_pos[0]*self.app.cell_width+TOP_BOTTOM_BUFFER//2,
-                  self.grid_pos[1]*self.app.cell_height+TOP_BOTTOM_BUFFER//2, self.app.cell_width, self.app.cell_height), 1)
+        #pygame.draw.rect(self.app.screen, RED,(self.grid_pos[0]*self.app.cell_width+TOP_BOTTOM_BUFFER//2,self.grid_pos[1]*self.app.cell_height+TOP_BOTTOM_BUFFER//2, self.app.cell_width, self.app.cell_height), 1)
 
     def on_coin(self):
         if self.grid_pos in self.app.coins:
@@ -65,7 +66,7 @@ class Player:
 
     def eat_coin(self):
         self.app.coins.remove(self.grid_pos)
-        self.current_score += 1
+        self.current_score += 10
                 
     def move(self, direction):
         self.stored_direction = direction
